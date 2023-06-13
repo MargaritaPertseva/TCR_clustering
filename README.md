@@ -10,3 +10,5 @@ The project includes following files:
  
 This is the example of how to use main_triplet.py file:
 python main_triplet.py --model_type CNN --input_type beta --data_size small --embedding_space 32 --epochs 200 --batch_size 256 --learning_rate 0.001 --triplet_mode naive --patience 20 --triplet_loss semihard --plot_embedding False
+
+This project is still no publised, so the TCR data can't be made publicly accessible yet.
