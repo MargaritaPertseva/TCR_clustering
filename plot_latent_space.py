@@ -23,7 +23,7 @@ import config_script
 import model_architecture
 import enc_decode
 
-"""
+
 # parse the command line
 if __name__ == "__main__":
     # initialize Argument Parser
@@ -39,9 +39,9 @@ args = parser.parse_args()
 INPUT_TYPE = args.input_type
 RESULTS_FOLDER = args.results_folder
 EMBEDDING_SPACE = args.embedding_space
-"""
+
     
-"""
+
 #####################################################################################
 ################## Open test embeddings and universal plot df #######################
 
@@ -54,7 +54,7 @@ universal_plot_df = pd.read_csv(config_script.plot_df_test, header = 0)
 # 3) extract predicted model embeddings for selected seqs
 plot_seqs = pd.merge(universal_plot_df,test_emb_umap_pca, on = ['CDR3a', 'CDR3b', 'species'], how = 'inner')
 print ('Length should be 11880 seqs! Actual length is : ', len(plot_seqs))
-"""
+
 
 #####################################################################################
 ########################## Calculate UMAP PCA #####################################  
@@ -140,7 +140,7 @@ def plot_umap_pca_latent(df, hue_column, color_dict, fig_title, legend_title, no
         
     return g
 
-"""
+
 ########################## To plot latent space #####################################
 
 # plot species distribution
@@ -203,4 +203,3 @@ def plot_acc_bars(df, color_list, figname):
 
     g.savefig(out_analysis_dir + '/' + figname, \
                       dpi=500, bbox_inches='tight', pad_inches=0.5)
-"""
