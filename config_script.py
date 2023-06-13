@@ -43,7 +43,7 @@ model_input_dict = dict(zip(keys, values))
 ######################################################################
 ################# Open TCR PAIRED repertoire files ###################
 
-directory_TCR = "/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Datasets/TCR_datasets/TCR_paired/"
+directory_TCR = "./Datasets/TCR_datasets/TCR_paired/"
 
 train = directory_TCR + 'TCRab_Hom_Mus_train.csv'
 val = directory_TCR + 'TCRab_Hom_Mus_val.csv'
@@ -63,7 +63,7 @@ test_b_70 = directory_TCR + 'TCRab_test_b_70.csv'
 #######################################################################
 ###################### Open TCRpMHC file NEW ##########################
 
-directory_TCRpMHC = '/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Datasets/pMHC_TCR_dataset/TCRpMHC_new/train_data/'
+directory_TCRpMHC = './Datasets/pMHC_TCR_dataset/TCRpMHC_new/train_data/'
 TCRpMHC_new_data_90cdhit = directory_TCRpMHC + 'TCRpMHC_data_with_folds_90cdhit.csv'
 
 
@@ -71,7 +71,7 @@ TCRpMHC_new_data_90cdhit = directory_TCRpMHC + 'TCRpMHC_data_with_folds_90cdhit.
 #######################################################################
 ###################### Open TCRpMHC files #############################
 
-directory_TCRpMHC = "/Users/pertsevm/Desktop/VAE_Oceane_Rita_Daniele/Datasets/pMHC_TCR_dataset/Combined_final_TCRpMHC_datasets/"
+directory_TCRpMHC = "./Datasets/pMHC_TCR_dataset/Combined_final_TCRpMHC_datasets/"
 
 #Balanced datasets 
 # with cd-hit
@@ -104,9 +104,9 @@ TCRpMHC_CDR3b_unbalnce = directory_TCRpMHC + 'Unbalanced_datasets_eg_all_data/CD
 
 
 ######################### OUTPUT DIRECTORY #################################
-autoencoder_output_dir = "/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Saved_models/CNN_AE/"
-triplet_out_model= "/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Saved_models/CNN_AE_TRIPLET/"
-autoencoder_analysis_dir = "/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Performance_files/CNN_AE_performance_and_latent_space/"
-triplet_analysis_dir = "/Users/pertsevm/Desktop/VAE_triplet_yet_again_final/Performance_files/Triplet_performance_and_latent_space/"
+autoencoder_output_dir = "./Saved_models/CNN_AE/"
+triplet_out_model= "./Saved_models/CNN_AE_TRIPLET/"
+autoencoder_analysis_dir = "./Performance_files/CNN_AE_performance_and_latent_space/"
+triplet_analysis_dir = "./Performance_files/Triplet_performance_and_latent_space/"
 
 ############################################################################
