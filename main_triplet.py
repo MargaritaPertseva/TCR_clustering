@@ -34,7 +34,7 @@ if __name__ == "__main__":
     # initialize Argument Parser
     parser = argparse.ArgumentParser()    #help="Debug", nargs='?', type=int, const=1, default=7
     
-    # we can add any different arguments we want to parse
+    # to add any different arguments we want to parse
     parser.add_argument("--model_type", help="CNN or vanilla", type=str, default='CNN') ## CNN or vanilla
     parser.add_argument("--input_type", help="beta, albeta, beta_VJ, albeta_VJ", type=str) ## beta, beta_VJ, albeta, albeta_VJ
     parser.add_argument("--embedding_space", type=int) ## embedding dimension for TCR
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("--plot_embedding", type = bool, default = False)
 
     
-# we then read the arguments from the comand line
+# to read the arguments from the command line
 args = parser.parse_args()
 MODEL_TYPE = args.model_type
 INPUT_TYPE = args.input_type
@@ -64,7 +64,7 @@ PATIENCE = args.patience
 ENCODER_NAME = args.encoder_name # ENCODER_NAME = 'cnn_newd_albeta_48_dim'
 
 #triplet hyperparameters
-TRIPLET_MODE = args.triplet_mode #'naive' #naive or pretrained
+TRIPLET_MODE = args.triplet_mode #naive or pretrained
 LOSS = args.triplet_loss #'semihard' or 'hard'
 N_AE_LAYERS = args.n_trained_layers
 TRAINABLE_LAYERS =  args.trainable_layers
@@ -83,8 +83,8 @@ print ('TRAINABLE_LAYERS : ', TRAINABLE_LAYERS )
 ########################################################################################
 ############################ Open TCRpMHC and encode them ##############################
 
-# open the files and assign some constant variables
-TCRpMHC = pd.read_csv(config_script.TCRpMHC_new_data_90cdhit, header = 0)
+# to open the files and assign some constant variables
+TCRpMHC = pd.read_csv(config_script.TCRpMHC_90cdhit, header = 0)
 
 model_input_dict = config_script.model_input_dict
 model_input_key = INPUT_TYPE
@@ -92,14 +92,9 @@ df_columns = model_input_dict[model_input_key][0] #get columns to encode
 max_seq_len = model_input_dict[model_input_key][1] #get max length for padding
 print ('df_columns: ', df_columns, 'max_seq_len: ', max_seq_len)
 
-# make a dist of one-hot encoded amino acids for data encoding:
+# to create a dict of one-hot encoded amino acids for TCR encoding
 AA_list = list("ACDEFGHIKLMNPQRSTVWY_")
 AA_one_hot_dict = {char : l for char, l in zip(AA_list, np.eye(len(AA_list), k=0))}
-
-# K-fold Cross Validation model evaluation
-#fold_no = 1
-#for train, test in kfold.split(inputs, targets):
-
 
 #select train, val, test data  ###CHANGE THIS
 train = TCRpMHC[TCRpMHC['part'].isin([0, 1, 2, 3, 4])]
@@ -131,7 +126,6 @@ val_triplet = tf.data.Dataset.from_tensor_slices((X_val, y_val))
 val_triplet = val_triplet.batch(BATCH_SIZE)
 
 
-
 ######################################################################################
 ############################ Set up & train a model  #################################
 
@@ -153,14 +147,11 @@ if TRIPLET_MODE == 'fully_pretrained':
     autoencoder = keras.models.load_model(config_script.autoencoder_output_dir + ENCODER_NAME)
     triplet = model_architecture.Triplet_CNN_fully_pretrained(X_train.shape[1:], autoencoder, trainable = TRAINABLE_LAYERS , embedding_units = EMBEDDING_SPACE)
     
-
-
 triplet.compile(optimizer=tf.keras.optimizers.Adam(LRATE), loss=loss) #tfa.losses.TripletSemiHardLoss()
 triplet.summary()
 
 early_stop = EarlyStopping(monitor='val_loss', mode='min', patience = PATIENCE, \
                    verbose = 1, restore_best_weights = True)
-
 
 print ('Starting training...')
 history = triplet.fit(
