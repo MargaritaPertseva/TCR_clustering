@@ -35,7 +35,6 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--model_name", type=str)
     parser.add_argument("--do_analysis", type=bool)
-    
     parser.add_argument("--results_folder", type=str) #to record it
     #parser.add_argument("--n_filters", type=list)
     #parser.add_argument("--n_hidden", type=list)
