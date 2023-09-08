@@ -9,6 +9,6 @@ The project includes the following files:
  - plot_triplet_emb.py  - files to visualise the trained embeddings on a test dataset
  
 This is an example of how to use the main_triplet.py file:
-python main_triplet.py --model_type CNN --input_type beta --data_size small --embedding_space 32 --epochs 200 --batch_size 256 --learning_rate 0.001 --triplet_mode naive --patience 20 --triplet_loss semihard --plot_embedding False
+python main_triplet.py --model_type CNN --input_type beta --embedding_space 32 --epochs 200 --batch_size 256 --learning_rate 0.001 --triplet_mode naive --patience 20 --triplet_loss semihard --plot_embedding False
 
 Note, that this project has not been published, so the TCR data, model analysis and results can't be made publicly accessible yet.
