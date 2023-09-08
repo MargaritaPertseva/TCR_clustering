@@ -6,8 +6,7 @@ The project includes the following files:
  - config_script.py - a file to access training files and folders for and after training
  - enc_decode.py - a file to one-hot encode and decode TCR amino acid sequences
  - model_architecture.py - convolutional neural network and feed-forward neural network architecture
- - plot_triplet_emb.py  - files to visualise the trained embeddings on a test dataset
- 
+
 This is an example of how to use the main_triplet.py file:
 python main_triplet.py --model_type CNN --input_type beta --embedding_space 32 --epochs 200 --batch_size 256 --learning_rate 0.001 --triplet_mode naive --patience 20 --triplet_loss semihard --plot_embedding False
 
