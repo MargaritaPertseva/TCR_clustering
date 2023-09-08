@@ -64,6 +64,10 @@ test_b_80 = directory_TCR + 'TCRab_test_b_80.csv'
 test_b_75 = directory_TCR + 'TCRab_test_b_75.csv'
 test_b_70 = directory_TCR + 'TCRab_test_b_70.csv'
 
+test_files_dict = {'beta': ['test_b_85', 'test_b_80', 'test_b_75', 'test_b_70'], \
+                   'beta_VJ': ['test_b_85', 'test_b_80', 'test_b_75', 'test_b_70'], \
+                   'albeta': ['test_ab_85', 'test_ab_80', 'test_ab_75', 'test_ab_70'], \
+                   'albeta_VJ': ['test_ab_85', 'test_ab_80', 'test_ab_75', 'test_ab_70']}
 
 
 ######################### OUTPUT DIRECTORY #################################
