@@ -17,6 +17,26 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras import layers, losses
 from tensorflow.keras.models import Model
 
+def Autoencoder_Vanilla(input_shape, embedding_units, hidden_units):
+
+    #encoder
+    encoder_input = keras.Input(shape=input_shape)
+    input_layer = layers.Dense(encoder_input.shape[1], activation='relu')(encoder_input)
+    hid_1 = layers.Dense(hidden_units[0], activation='relu')(input_layer)
+    hid_2 = layers.Dense(hidden_units[1], activation='relu')(hid_1)
+    encoded = layers.Dense(embedding_units, activation='relu')(hid_2)
+    
+    #decoder
+    hid_2_dcdr = layers.Dense(hidden_units[1], activation='relu')(encoded)
+    hid_1_dcdr = layers.Dense(hidden_units[0], activation='relu')(hid_2_dcdr)
+    decoded = layers.Dense(encoder_input.shape[1], activation='sigmoid')(hid_1_dcdr) #relu or softmax or sigmoid?
+    #print (decoded.shape)
+    
+    #autoencoder
+    autoencoder = Model(encoder_input, decoded)
+    
+    return autoencoder
+
 def Autoencoder_CNN(input_shape, embedding_units, n_filters_list):  #N_FILTERS = [128, 64, 16]
     #encoder
     encoder_input = keras.Input(shape = input_shape)
@@ -39,28 +59,6 @@ def Autoencoder_CNN(input_shape, embedding_units, n_filters_list):  #N_FILTERS =
     
     return autoencoder
 
-
-def Autoencoder_Vanilla(input_shape, embedding_units, hidden_units):
-
-    #encoder
-    encoder_input = keras.Input(shape=input_shape)
-    input_layer = layers.Dense(encoder_input.shape[1], activation='relu')(encoder_input)
-    hid_1 = layers.Dense(hidden_units[0], activation='relu')(input_layer)
-    hid_2 = layers.Dense(hidden_units[1], activation='relu')(hid_1)
-    encoded = layers.Dense(embedding_units, activation='relu')(hid_2)
-    
-    #decoder
-    hid_2_dcdr = layers.Dense(hidden_units[1], activation='relu')(encoded)
-    hid_1_dcdr = layers.Dense(hidden_units[0], activation='relu')(hid_2_dcdr)
-    decoded = layers.Dense(encoder_input.shape[1], activation='sigmoid')(hid_1_dcdr) #relu or softmax or sigmoid?
-    #print (decoded.shape)
-    
-    #autoencoder
-    autoencoder = Model(encoder_input, decoded)
-    
-    return autoencoder
-
-
 def Triplet_CNN_naive(input_shape, embedding_units):
     
     ## triplet model architecture
@@ -77,7 +75,7 @@ def Triplet_CNN_naive(input_shape, embedding_units):
     return triplet_loss_model
 
 
-def Triplet_CNN_pretrained(input_shape, autoencoder_model, n_of_AE_layers, trainable, \
+def Triplet_CNN_pretrained_top_lyrs(input_shape, autoencoder_model, n_of_AE_layers, trainable, \
                 embedding_units, n_filters):
     
     ## take N layers from trained CNN_AE model
