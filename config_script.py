@@ -38,10 +38,15 @@ values = [(['CDR3b'], max_CDR_3b_len), (['CDR1b','CDR2b','CDR3b'], max_CDR_123b_
           (['CDR3a', 'CDR3b'], max_CDR3_ab_len), (['CDR1a', 'CDR2a',  'CDR3a', 'CDR1b', 'CDR2b',  'CDR3b'], max_CDR123_ab_len)]
 model_input_dict = dict(zip(keys, values))
 
+#######################################################################
+###################### Open TCRpMHC file ##############################
+
+directory_TCRpMHC = './Datasets/pMHC_TCR_dataset/train_data/'
+TCRpMHC_90cdhit = directory_TCRpMHC + 'TCRpMHC_data_with_folds_90cdhit.csv'
 
 
 ######################################################################
-################# Open TCR PAIRED repertoire files ###################
+################# Open TCR PAIRED CHAIN repertoire files #############
 
 directory_TCR = "./Datasets/TCR_datasets/TCR_paired/"
 
@@ -58,48 +63,6 @@ test_b_85 = directory_TCR + 'TCRab_test_b_85.csv'
 test_b_80 = directory_TCR + 'TCRab_test_b_80.csv'
 test_b_75 = directory_TCR + 'TCRab_test_b_75.csv'
 test_b_70 = directory_TCR + 'TCRab_test_b_70.csv'
-
-
-#######################################################################
-###################### Open TCRpMHC file NEW ##########################
-
-directory_TCRpMHC = './Datasets/pMHC_TCR_dataset/TCRpMHC_new/train_data/'
-TCRpMHC_new_data_90cdhit = directory_TCRpMHC + 'TCRpMHC_data_with_folds_90cdhit.csv'
-
-
-
-#######################################################################
-###################### Open TCRpMHC files #############################
-
-directory_TCRpMHC = "./Datasets/pMHC_TCR_dataset/Combined_final_TCRpMHC_datasets/"
-
-#Balanced datasets 
-# with cd-hit
-TCRpMHC_paired_VJ_95cdh = directory_TCRpMHC + 'Balanced_data_95_similarity/paired_VJ_balanced_95__cdhit_similarity.tsv'
-TCRpMHC_CDR3b_VJ_95cdh = directory_TCRpMHC + 'Balanced_data_95_similarity/CDR3b_VJ_balanced_95__cdhit_similarity.tsv'
-TCRpMHC_paired_95cdh = directory_TCRpMHC + 'Balanced_data_95_similarity/paired_balanced_95__cdhit_similarity.tsv'
-TCRpMHC_CDR3b_95cdh = directory_TCRpMHC + 'Balanced_data_95_similarity/CDR3b_balanced_95__cdhit_similarity.tsv'
-
-TCRpMHC_paired_VJ_90cdh = directory_TCRpMHC + 'Balanced_data_90_similarity/paired_VJ_balanced_90__cdhit_similarity.tsv'
-TCRpMHC_CDR3b_VJ_90cdh = directory_TCRpMHC + 'Balanced_data_90_similarity/CDR3b_VJ_balanced_90__cdhit_similarity.tsv'
-TCRpMHC_paired_90cdh = directory_TCRpMHC + 'Balanced_data_90_similarity/paired_balanced_90__cdhit_similarity.tsv'
-TCRpMHC_CDR3b_90cdh = directory_TCRpMHC + 'Balanced_data_90_similarity/CDR3b_balanced_90__cdhit_similarity.tsv'
-
-#randomly balanced
-TCRpMHC_paired_VJ_rndm_bal = directory_TCRpMHC + 'Randomly_balanced_datasets/Paired_VJ_random_balanced_400.tsv'
-TCRpMHC_CDR3b_VJ_rndm_bal = directory_TCRpMHC + 'Randomly_balanced_datasets/CDR3b_VJ_random_balanced_400.tsv'
-TCRpMHC_paired_rndm_bal = directory_TCRpMHC + 'Randomly_balanced_datasets/Paired_random_balanced_400.tsv'
-TCRpMHC_CDR3b_rndm_bal = directory_TCRpMHC + 'Randomly_balanced_datasets/CDR3b_random_balanced_400.tsv'
-
-# not balanced at all
-TCRpMHC_paired_VJ_unbalnce = directory_TCRpMHC + 'Unbalanced_datasets_eg_all_data/Paired_VJ_90_no_cross.tsv'
-TCRpMHC_CDR3b_VJ_unbalnce = directory_TCRpMHC + 'Unbalanced_datasets_eg_all_data/CDR3b_VJ_90_no_cross.tsv'
-TCRpMHC_paired_unbalnce = directory_TCRpMHC + 'Unbalanced_datasets_eg_all_data/Paired_90_no_cross.tsv'
-TCRpMHC_CDR3b_unbalnce = directory_TCRpMHC + 'Unbalanced_datasets_eg_all_data/CDR3b_90_no_cross.tsv'
-
-#######################################################################
-#######################################################################
-
 
 
 
