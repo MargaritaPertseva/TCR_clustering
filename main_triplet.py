@@ -8,6 +8,7 @@ Created on Wed Aug 31 16:39:47 2022
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import random
 
 import tensorflow as tf
 from tensorflow import keras
@@ -96,10 +97,12 @@ print ('df_columns: ', df_columns, 'max_seq_len: ', max_seq_len)
 AA_list = list("ACDEFGHIKLMNPQRSTVWY_")
 AA_one_hot_dict = {char : l for char, l in zip(AA_list, np.eye(len(AA_list), k=0))}
 
-#select train, val, test data  ###CHANGE THIS
-train = TCRpMHC[TCRpMHC['part'].isin([0, 1, 2, 3, 4])]
-val = TCRpMHC[TCRpMHC['part']==5]
-test = TCRpMHC[TCRpMHC['part']==6]
+#select train, val, test data
+part_list = [0, 1, 2, 3, 4, 5, 6]
+val_test_part = random.sample(part_list, 2)
+train = TCRpMHC[~TCRpMHC['part'].isin(val_test_list)]
+val = TCRpMHC[TCRpMHC['part']==val_test_part[0]]
+test = TCRpMHC[TCRpMHC['part']==val_test_part[1]]
 
 #encode the data
 X_train = enc_decode.CDR_one_hot_encoding(train, df_columns, AA_list, AA_one_hot_dict, max_seq_len)
@@ -128,6 +131,7 @@ val_triplet = val_triplet.batch(BATCH_SIZE)
 
 ######################################################################################
 ############################ Set up & train a model  #################################
+tf.keras.utils.set_random_seed(1234) 
 
 if LOSS == 'hard':
     loss = tfa.losses.TripletHardLoss()
@@ -169,12 +173,13 @@ best_epochs = np.argmin(loss_hist) + 1
 
 print ('TRAINABLE_LAYERS: ', TRAINABLE_LAYERS)
 # create a new model folder if there is none
+val_test_str = ''.join([str(x) for x in val_test_part])
 if TRIPLET_MODE == 'naive':
     TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence'
 if TRIPLET_MODE == 'fully_pretrained':
-    TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_'
+    TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_fold{{val_test_str}'
 if TRIPLET_MODE == 'pretrained_top_layers':
-    TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_Nfilters{N_FILTERS}'
+    TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_Nfilters{N_FILTERS}_fold{{val_test_str}'
     
 modelpath = config_script.triplet_out_model + TRIPLET_NAME
 if not os.path.exists(modelpath):
