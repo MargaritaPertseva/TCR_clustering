@@ -52,7 +52,7 @@ def CDR_one_hot_encoding(df, column_list, aa_list, aa_one_hot_dict, max_seq_len)
 
 
 def recnstr_acc_all(data, predictions, flat_enc):
-    #accuracy on all (with _)
+    # calculate reconstruction accuracy on a whole sequence (with _)
     if flat_enc == True:
         predictions = [np.reshape(reconstr_seq, (-1, len(AA_list))) for reconstr_seq in predictions]
         data = [np.reshape(seq, (-1, len(AA_list))) for seq in data]
@@ -62,7 +62,7 @@ def recnstr_acc_all(data, predictions, flat_enc):
     return accuracy_all
 
 def recnstr_acc_loops(data, predictions, flat_enc):
-    # accuracy on loops, only on amino acids (no dash line)
+    # calculate reconstruction accuracy on CDR loops, only on amino acids (no dashed line)
     pred_loops = []
     true_loops = []
     count_unequal_len = 0
