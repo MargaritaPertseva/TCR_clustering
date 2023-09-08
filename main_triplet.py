@@ -42,8 +42,8 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--learning_rate", type=float, default=0.0001)
-    parser.add_argument("--encoder_name", type=str)
     parser.add_argument("--patience", type = int, default = 15)
+    
     #triplet hyperparameters
     parser.add_argument("--triplet_mode", help="naive, pretrained_top_layers or fully_pretrained", type=str, default='pretrained')
     parser.add_argument("--triplet_loss", help="hard or semihard", type=str, default='semihard')
@@ -62,7 +62,6 @@ EPOCHS = args.epochs
 BATCH_SIZE = args.batch_size
 LRATE = args.learning_rate
 PATIENCE = args.patience
-ENCODER_NAME = args.encoder_name # ENCODER_NAME = 'cnn_newd_albeta_48_dim'
 
 #triplet hyperparameters
 TRIPLET_MODE = args.triplet_mode #naive or pretrained
