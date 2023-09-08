@@ -7,18 +7,13 @@ Created on Wed Aug 31 16:39:47 2022
 """
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from keras.callbacks import EarlyStopping
 from keras.callbacks import TensorBoard
-
-#from sklearn.metrics import accuracy_score, precision_score, recall_score
-#from sklearn.model_selection import train_test_split
-#from tensorflow.keras import layers, losses
-#from tensorflow.keras.models import Model
 
 import os 
 import argparse
@@ -33,12 +28,11 @@ if __name__ == "__main__":
     # initialize Argument Parser
     parser = argparse.ArgumentParser()
     
-    # we can add any different arguments we want to parse
+    # to add different arguments we want to parse
     parser.add_argument("--model_type", type=str) #cnn or vanilla
     parser.add_argument("--input_type", type=str) #beta, albeta, beta_VJ, albeta_VJ
     parser.add_argument("--embedding_space", type=int)
     parser.add_argument("--epochs", type=int)
-    #parser.add_argument("--batch_size", type=int)
     parser.add_argument("--model_name", type=str)
     parser.add_argument("--do_analysis", type=bool)
     
@@ -46,13 +40,12 @@ if __name__ == "__main__":
     #parser.add_argument("--n_filters", type=list)
     #parser.add_argument("--n_hidden", type=list)
     
-# we then read the arguments from the comand line
+# to read the arguments from the command line
 args = parser.parse_args()
 MODEL_TYPE = args.model_type
 INPUT_TYPE = args.input_type
 EMBEDDING_SPACE = args.embedding_space
 EPOCHS = args.epochs
-#BATCH_SIZE = args.batch_size
 MODEL_NAME = args.model_name
 DO_ANALYSIS = args.do_analysis
 
@@ -80,7 +73,6 @@ df_columns = model_input_dict[model_input_key][0] #get columns to encode
 max_seq_len = model_input_dict[model_input_key][1] #get max length for padding
 print ('df_columns: ', df_columns, 'max_seq_len: ', max_seq_len)
 
-
 # make a dist of one-hot encoded amino acids for data encoding:
 AA_list = list("ACDEFGHIKLMNPQRSTVWY_")
 AA_one_hot_dict = {char : l for char, l in zip(AA_list, np.eye(len(AA_list), k=0))}
@@ -103,13 +95,12 @@ val_tensor = val_tensor.shuffle(1024).batch(32)
 test_tensor = test_tensor.shuffle(1024).batch(32)
 
 tf.keras.backend.clear_session()
-optimizer = tf.keras.optimizers.Adam(lr=0.0003) #lr = LEARNING RATE as a input variable???
+optimizer = tf.keras.optimizers.Adam(lr=0.0003)
 
 if MODEL_TYPE == 'CNN':
     autoencoder_model = model_architecture.Autoencoder_CNN(X_train.shape[1:], \
                                         embedding_units = EMBEDDING_SPACE, \
                                             n_filters_list = N_FILTERS)
-                                            
     autoencoder_model.compile(optimizer=optimizer, loss="categorical_crossentropy")
     autoencoder_model.summary()
     
@@ -120,7 +111,6 @@ if MODEL_TYPE == 'vanilla':
     autoencoder_model = model_architecture.Autoencoder_Vanilla(X_train.shape[1:], \
                                                                embedding_units = EMBEDDING_SPACE, \
                                                                    hidden_units = N_HIDDEN)
-    
     autoencoder_model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0003), loss='binary_crossentropy') #binary_crossentropy & sigmoid;
     autoencoder_model.summary()
     
@@ -146,9 +136,9 @@ autoencoder_model.save(config_script.autoencoder_output_dir + MODEL_NAME)
 ####################################################################################################
 ######################### Save model embeddings for future analysis ################################
 
-if MODEL_TYPE == 'vanilla': #could it be better???
-        FLAT_ENC = True
-        last_enc_layer = 5
+if MODEL_TYPE == 'vanilla':
+    FLAT_ENC = True
+    last_enc_layer = 5
 if MODEL_TYPE == 'CNN': 
     FLAT_ENC = False
     last_enc_layer = 6
@@ -156,7 +146,7 @@ if MODEL_TYPE == 'CNN':
 autoencoder_model = keras.models.load_model(config_script.utoencoder_output_dir + MODEL_NAME)
 encoder = tf.keras.Sequential()
 decoder = tf.keras.Sequential()
-for layer in autoencoder_model.layers[:last_enc_layer]: encoder.add(layer) #[:6] for CNN  [:5] for FFNN
+for layer in autoencoder_model.layers[:last_enc_layer]: encoder.add(layer)
 for layer in autoencoder_model.layers[last_enc_layer:]: decoder.add(layer)
 
 ####################################################
@@ -198,7 +188,7 @@ test_emb_umap_pca.to_csv(config_script.autoencoder_analysis_dir + RESULTS_FOLDER
 
 if DO_ANALYSIS:
     ####################################################
-    # 1) check reconstruction accuracy on validation set
+    # 1) to check the reconstruction accuracy on VALIDATION set
     predictions_val = autoencoder_model.predict(X_val)
     gen_val_acc = enc_decode.recnstr_acc_all(X_val, predictions_val, flat_enc = FLAT_ENC)
     acc_per_loop_val = enc_decode.recnstr_acc_loops(X_val, predictions_val, flat_enc = FLAT_ENC)
@@ -206,7 +196,7 @@ if DO_ANALYSIS:
     df_val.loc[len(df_val.index)] = ['all_loops', gen_val_acc, 'val'] 
     
     ####################################################  
-    # 2) check reconstruction accuracy on TEST set
+    # 2) to check the reconstruction accuracy on TEST set
     predictions_test = autoencoder_model.predict(X_test)
     gen_test_acc = enc_decode.recnstr_acc_all(X_test, predictions_test, flat_enc = FLAT_ENC)
     acc_per_loop_test = enc_decode.recnstr_acc_loops(X_test, predictions_test, flat_enc = FLAT_ENC)
@@ -214,7 +204,7 @@ if DO_ANALYSIS:
     df_test.loc[len(df_test.index)] = ['all_loops', gen_test_acc, 'test'] 
     
     #################################################### 
-    # 3) check how it works on dissimilar datasets
+    # 3) to check the reconstruction accuracy on increasingly dissimilar datasets
     test_cdhit_splits = config_script.test_files_dict
     test_85 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][0], header = 0)
     test_80 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][1], header = 0)
@@ -232,7 +222,7 @@ if DO_ANALYSIS:
         x_test_75 = x_test_75.reshape(-1, len(AA_list) * max_seq_len)
         x_test_70 = x_test_70.reshape(-1, len(AA_list) * max_seq_len)
     
-    ## check how it works on dissimilar datasets
+    ## to calculate the accuracy and save it
     x_test_enc = [x_test_85, x_test_80, x_test_75, x_test_70]
     names = ['test_85', 'test_80', 'test_75', 'test_70']
     test_cdhit = pd.DataFrame()
