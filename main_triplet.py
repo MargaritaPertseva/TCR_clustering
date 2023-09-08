@@ -44,7 +44,7 @@ if __name__ == "__main__":
     parser.add_argument("--encoder_name", type=str)
     parser.add_argument("--patience", type = int, default = 15)
     #triplet hyperparameters
-    parser.add_argument("--triplet_mode", help="naive, pretrained or fully_pretrained", type=str, default='pretrained')
+    parser.add_argument("--triplet_mode", help="naive, pretrained_top_layers or fully_pretrained", type=str, default='pretrained')
     parser.add_argument("--triplet_loss", help="hard or semihard", type=str, default='semihard')
     parser.add_argument("--n_trained_layers", help = 'n of autoencoder layers to transfer', type=int, default = 3) #3, 4, 5
     parser.add_argument("--trainable_layers", help = 'allow to train transferred layers or not', type=str)
@@ -139,15 +139,15 @@ tf.keras.backend.clear_session()
 if TRIPLET_MODE == 'naive':
     triplet = model_architecture.Triplet_CNN_naive(X_train.shape[1:], embedding_units = EMBEDDING_SPACE)
     
-if TRIPLET_MODE == 'pretrained':
+if TRIPLET_MODE == 'pretrained_top_layers':
     autoencoder = keras.models.load_model(config_script.autoencoder_output_dir + ENCODER_NAME)
-    triplet = model_architecture.Triplet_CNN_pretrained(X_train.shape[1:], autoencoder, n_of_AE_layers = N_AE_LAYERS, trainable = TRAINABLE_LAYERS , embedding_units = EMBEDDING_SPACE, n_filters = N_FILTERS)
+    triplet = model_architecture.Triplet_CNN_pretrained_top_lyrs(X_train.shape[1:], autoencoder, n_of_AE_layers = N_AE_LAYERS, trainable = TRAINABLE_LAYERS , embedding_units = EMBEDDING_SPACE, n_filters = N_FILTERS)
     
 if TRIPLET_MODE == 'fully_pretrained':
     autoencoder = keras.models.load_model(config_script.autoencoder_output_dir + ENCODER_NAME)
     triplet = model_architecture.Triplet_CNN_fully_pretrained(X_train.shape[1:], autoencoder, trainable = TRAINABLE_LAYERS , embedding_units = EMBEDDING_SPACE)
     
-triplet.compile(optimizer=tf.keras.optimizers.Adam(LRATE), loss=loss) #tfa.losses.TripletSemiHardLoss()
+triplet.compile(optimizer=tf.keras.optimizers.Adam(LRATE), loss=loss)
 triplet.summary()
 
 early_stop = EarlyStopping(monitor='val_loss', mode='min', patience = PATIENCE, \
@@ -167,23 +167,21 @@ loss_hist = history.history['val_loss']
 best_val_loss = np.min(loss_hist)
 best_epochs = np.argmin(loss_hist) + 1
 
-
-
 print ('TRAINABLE_LAYERS: ', TRAINABLE_LAYERS)
 # create a new model folder if there is none
 if TRIPLET_MODE == 'naive':
     TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence'
 if TRIPLET_MODE == 'fully_pretrained':
     TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_'
-if TRIPLET_MODE == 'pretrained':
+if TRIPLET_MODE == 'pretrained_top_layers':
     TRIPLET_NAME = f'triplet_{TRIPLET_MODE}_{INPUT_TYPE}_{EMBEDDING_SPACE}d_{LRATE}lr_{BATCH_SIZE}btch_{EPOCHS}ep_{PATIENCE}ptence_trainable{TRAINABLE_LAYERS}_Nfilters{N_FILTERS}'
     
 modelpath = config_script.triplet_out_model + TRIPLET_NAME
 if not os.path.exists(modelpath):
     os.makedirs(modelpath)
+    
 # save the model
 triplet.save(config_script.triplet_out_model + TRIPLET_NAME)
-
 
 with open(config_script.triplet_analysis_dir + 'Triplet_Val_Loss.csv', 'a') as file:
     writer = csv.writer(file)
@@ -198,7 +196,6 @@ with open(config_script.triplet_analysis_dir + 'Triplet_Val_Loss.csv', 'a') as f
 ########################################################################################
 ############################## Plot model embeddings ###################################  
 if PLOT_EMB == True:
-    
     results_val = triplet(X_val)
     results_test = triplet(X_test)
     results_train = triplet(X_train)
