@@ -119,12 +119,6 @@ palette_31 = ['#201923', '#ffffff', '#fcff5d','#7dfc00','#946aa2', \
            '#b732cc','#772b9d','#f07cab','#d30b94','#edeff3', \
            '#c3a5b4']
 
-color_dict = dict({'Africa':'brown',
-                  'Asia':'green',
-                  'Europe': 'orange',
-                  'Oceania': 'red',
-                   'Americas': 'dodgerblue'})
-
 def plot_umap_pca_latent(df, hue_column, color_list, fig_title, legend_title, node_size, save, figname):
     
     # 1) set up sns style
