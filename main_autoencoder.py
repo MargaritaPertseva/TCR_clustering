@@ -204,11 +204,17 @@ if DO_ANALYSIS:
     
     #################################################### 
     # 3) to check the reconstruction accuracy on increasingly dissimilar datasets
-    test_cdhit_splits = config_script.test_files_dict
-    test_85 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][0], header = 0)
-    test_80 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][1], header = 0)
-    test_75 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][2], header = 0)
-    test_70 = pd.read_csv(test_cdhit_splits[INPUT_TYPE][3], header = 0)
+    if INPUT_TYPE == 'beta' or INPUT_TYPE == 'beta_VJ':
+        test_85 = pd.read_csv(config_script.test_b_85, header = 0)
+        test_80 = pd.read_csv(config_script.test_b_80, header = 0)
+        test_75 = pd.read_csv(config_script.test_b_75, header = 0)
+        test_70 = pd.read_csv(config_script.test_b_70, header = 0)
+        
+    if INPUT_TYPE == 'albeta' or INPUT_TYPE == 'albeta_VJ':
+        test_85 = pd.read_csv(config_script.test_ab_85, header = 0)
+        test_80 = pd.read_csv(config_script.test_ab_80, header = 0)
+        test_75 = pd.read_csv(config_script.test_ab_75, header = 0)
+        test_70 = pd.read_csv(config_script.test_ab_70, header = 0)
 
     x_test_85 = enc_decode.CDR_one_hot_encoding(test_85, df_columns, AA_list, AA_one_hot_dict, max_seq_len)
     x_test_80 = enc_decode.CDR_one_hot_encoding(test_80, df_columns, AA_list, AA_one_hot_dict, max_seq_len)
